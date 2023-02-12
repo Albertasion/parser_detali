@@ -9,8 +9,9 @@ require 'phpquery.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+
 define('URL', 'https://detali.org.ua');
-$request = requests('https://detali.org.ua/uk/642-zapchasti-dlya-svarki');
+$request = requests($_POST['name']);
 $output = phpQuery::newDocument($request);
 $menu = $output->find('.top-pagination-content a');
 foreach ($menu as $key => $value){
@@ -50,7 +51,7 @@ foreach ($all_products_links_array as $key => $value) {
 
     $product_sku = $output_all_product->find('.editable');
     $product_sku = $product_sku->html();
-
+  echo $product_sku.'<br>';
     $product_price = $output_all_product->find('#our_price_display');
     $product_price = $product_price->text();
   $product_price = str_replace(' ₴', "", $product_price);
@@ -82,7 +83,9 @@ phpQuery::unloadDocuments();
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 foreach ($product as $key => $value) {
+
   $product_sku_item = $product[$key]["sku"];
+
   $product_name_item = $product[$key]["name"];
   $product_price_item = $product[$key]["price"];
   $product_picture_item = $product[$key]["picture"];
